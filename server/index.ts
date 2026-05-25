@@ -4,7 +4,7 @@ import { pathToFileURL } from "url";
 import { apiRouter } from "./routes/api.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { apiLimiter } from "./middleware/rate-limiter.js";
-import { logger, logger } from "./services/logger.js";
+import { logger } from "./services/logger.js";
 
 dotenv.config();
 
