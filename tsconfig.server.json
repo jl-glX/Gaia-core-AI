@@ -8,6 +8,7 @@
     "composite": true,
     "outDir": "./dist/server",
     "skipLibCheck": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
