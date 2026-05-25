@@ -25,5 +25,3 @@ ReactDOM.createRoot(root).render(
     <App />
   </React.StrictMode>
 );
-
-darkQuery.addEventListener("change", updateDarkClass);
