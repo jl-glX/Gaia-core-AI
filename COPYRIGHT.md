@@ -9,8 +9,8 @@ This project and all its components, including but not limited to source code, d
 ### Owner Information
 
 - **Project Owner**: Javier López Díaz
-- **Project Name**: Budget Management Application
-- **Year of Creation**: 2024
+- **Project Name**: Gaia AI Application
+- **Year of Creation**: 2026
 
 ### Copyright Protection
 
@@ -38,8 +38,6 @@ This is a **pioneering project** in the field of personal finance management, co
 - Advanced budget analytics and visualization
 - Multi-language support (i18n/l10n)
 - Comprehensive security features
-- Template-based budget management
-- Tax integration system
 
 ### Support and Contributions
 
@@ -58,7 +56,7 @@ Your support, in any form, helps ensure the project's continued growth and impro
 For licensing inquiries, permissions, or to support the project, please contact:
 
 - **Email**: jld090653@ikmail.com
-- **GitHub**: [your-github-profile]
+- **GitHub**: [\[your-github-profile\]](https://github.com/jl-glX/Gaia-core-AI.git)
 - **Website**: [your-website.com]
 
 ### Legal Notice
