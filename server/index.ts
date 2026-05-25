@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
-import { setupStaticServing } from "./static-serve.js";
+import { pathToFileURL } from "url";
 import { apiRouter } from "./routes/api.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { apiLimiter } from "./middleware/rate-limiter.js";
-import { logger } from "./services/logger.js";
+import { logger, logger } from "./services/logger.js";
 
 dotenv.config();
 
@@ -43,9 +43,10 @@ app.use(errorHandler);
 // Export a function to start the server
 export async function startServer(port: string | number) {
   try {
-    if (process.env.NODE_ENV === "production") {
-      setupStaticServing(app);
-    }
+    if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  logger.info({ message: "Starting server..." });
+  startServer(process.env.PORT || 3001);
+}
 
     app.listen(port, () => {
       logger.info({ message: `API Server running on port ${port}` });
