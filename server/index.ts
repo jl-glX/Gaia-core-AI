@@ -49,8 +49,9 @@ export async function startServer(port: string | number) {
 }
 
     app.listen(port, () => {
-      logger.info({ message: `API Server running on port ${port}` });
-    });
+  console.log(`API server running on http://localhost:${port}`);
+  });
+
   } catch (err) {
     logger.error({ error: "Failed to start server", details: err });
     process.exit(1);
@@ -58,7 +59,7 @@ export async function startServer(port: string | number) {
 }
 
 // Start the server directly if this is the main module
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   logger.info({ message: "Starting server..." });
   startServer(process.env.PORT || 3001);
 }
