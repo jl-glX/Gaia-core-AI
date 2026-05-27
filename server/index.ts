@@ -43,15 +43,9 @@ app.use(errorHandler);
 // Export a function to start the server
 export async function startServer(port: string | number) {
   try {
-    if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  logger.info({ message: "Starting server..." });
-  startServer(process.env.PORT || 3001);
-}
-
     app.listen(port, () => {
-  console.log(`API server running on http://localhost:${port}`);
-  });
-
+      console.log(`API server running on http://localhost:${port}`);
+    });
   } catch (err) {
     logger.error({ error: "Failed to start server", details: err });
     process.exit(1);
