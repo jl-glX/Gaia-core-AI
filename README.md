@@ -6,11 +6,11 @@ A clean, modular TypeScript starter for building AI applications. Focused on inf
 
 ## Tech Stack
 
-- **Backend**: Node.js, Express, TypeScript
-- **Frontend**: React 18, Vite, Tailwind CSS
+- **Backend**: Node.js, Express, TypeScript 6
+- **Frontend**: React 19, Vite 8, Tailwind CSS 4
 - **Database**: SQLite with Kysely (optional)
 - **Testing**: Vitest
-- **Linting**: ESLint, Prettier
+- **Linting**: ESLint 10, Prettier
 
 ## Project Structure
 
