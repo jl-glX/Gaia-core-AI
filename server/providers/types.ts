@@ -17,6 +17,7 @@ export interface ProcessResponse {
   tokensUsed: number;
   model: string;
   provider: string;
+  warnings?: string[];
 }
 
 export interface ProviderError {

@@ -1,31 +1,22 @@
 {
-    "configurations": [
-        
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Server (npm run server)",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run",
-                "server"
-            ],
-            "cwd": "${workspaceFolder}",
-            "internalConsoleOptions": "neverOpen"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Server (tsx)",
-            "program": "${workspaceFolder}/server/index.ts",
-            "runtimeArgs": [
-                "--trace-warnings",
-                "--trace-uncaught",
-                "--import",
-                "tsx"
-            ],
-            "cwd": "${workspaceFolder}",
-            "internalConsoleOptions": "neverOpen"
-        }
-    ]
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Server (npm run server)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "server"],
+      "cwd": "${workspaceFolder}",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Server (tsx)",
+      "program": "${workspaceFolder}/server/index.ts",
+      "runtimeArgs": ["--trace-warnings", "--trace-uncaught", "--import", "tsx"],
+      "cwd": "${workspaceFolder}",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
 }

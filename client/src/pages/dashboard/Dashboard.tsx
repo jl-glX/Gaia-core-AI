@@ -3,7 +3,7 @@ import { InputPanel } from "./InputPanel";
 import { ResponseViewer } from "./ResponseViewer";
 import { SettingsPanel } from "./SettingsPanel";
 import { LogsPanel } from "./LogsPanel";
-import { checkHealth } from "../../lib/api";
+import { checkHealth, processPrompt } from "../../lib/api";
 
 interface LogEntry {
   timestamp: string;
@@ -21,6 +21,7 @@ export function Dashboard() {
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [tokensUsed, setTokensUsed] = useState(0);
+  const [model, setModel] = useState("");
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [settings, setSettings] = useState<Settings>({
     temperature: 0.7,
@@ -58,24 +59,11 @@ export function Dashboard() {
     addLog("Sending prompt...", "info");
 
     try {
-      // Simulated response for demo purposes
-      // In a real app, this would call processPrompt(...)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const mockResponse = `This is a demonstration response. 
-In a real application, this would contain the AI model's response.
-
-The infrastructure is set up and ready to integrate with:
-- Your chosen AI provider (OpenAI, Anthropic, etc.)
-- Custom language models
-- Local AI services
-
-Current Settings:
-- Temperature: ${settings.temperature}
-- Max Tokens: ${settings.maxTokens}`;
-
-      setResponse(mockResponse);
-      setTokensUsed(Math.floor(mockResponse.length / 4));
+      const result = await processPrompt({ prompt, settings });
+      setResponse(result.content);
+      setTokensUsed(result.tokensUsed);
+      setModel(`${result.provider}/${result.model}`);
+      result.warnings?.forEach((warning) => addLog(warning, "error"));
       addLog("Prompt processed successfully", "success");
     } catch (error) {
       addLog(`Error: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
@@ -109,6 +97,7 @@ Current Settings:
             <ResponseViewer
               response={response}
               tokensUsed={tokensUsed}
+              model={model}
               isLoading={isLoading}
             />
           </div>

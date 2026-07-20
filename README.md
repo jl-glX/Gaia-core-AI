@@ -1,15 +1,16 @@
 # Gaia-core-AI
+
 # AI-Ready TypeScript Infrastructure Starter
 
 A clean, modular TypeScript starter for building AI applications. Focused on infrastructure with proper separation of concerns, validation, and safety guards.
 
 ## Tech Stack
 
-- **Backend**: Node.js, Express, TypeScript
-- **Frontend**: React 18, Vite, Tailwind CSS
+- **Backend**: Node.js, Express, TypeScript 6
+- **Frontend**: React 19, Vite 8, Tailwind CSS 4
 - **Database**: SQLite with Kysely (optional)
 - **Testing**: Vitest
-- **Linting**: ESLint, Prettier
+- **Linting**: ESLint 10, Prettier
 
 ## Project Structure
 
@@ -71,12 +72,15 @@ npm install
 ### Development
 
 ```bash
-npm start
+npm run dev
 ```
 
 Runs:
+
 - Frontend dev server: http://localhost:3000
 - Backend API: http://localhost:3001
+
+Use `npm start` to launch the backend, frontend, and Electron desktop shell together.
 
 ### Build
 
@@ -103,7 +107,8 @@ npm run test
 npm run ci
 ```
 
-Runs formatting, linting, type checking, and tests.
+Checks formatting and linting, type-checks the frontend and backend, runs tests,
+and builds both production bundles.
 
 ## Docker
 
@@ -153,6 +158,7 @@ GET /api/health
 ```
 
 Response:
+
 ```json
 {
   "status": "healthy",
@@ -181,17 +187,18 @@ See `.env.example` for all available options.
 
 ## Scripts
 
-- `npm start` - Development mode
-- `npm run build` - Build for production
+- `npm run dev` - Start the web frontend and API
+- `npm start` - Start the web frontend, API, and Electron
+- `npm run build` - Build the frontend and server for production
 - `npm run format` - Format code with Prettier
 - `npm run lint` - Lint with ESLint
 - `npm run test` - Run tests
-- `npm run ci` - Run all checks (format, lint, type check, test)
+- `npm run ci` - Run all checks and production builds
 
 ## Safety Features
 
 - XSS protection via HTML escaping
-- CSRF protection ready
+- Restricted development CORS origin
 - Rate limiting on API endpoints
 - Input validation with Zod
 - PII detection warnings
@@ -201,7 +208,8 @@ See `.env.example` for all available options.
 ## Notes
 
 - This is infrastructure-focused, not a complete AI product
-- No external AI APIs are configured by default
+- No external AI APIs are configured by default; `/api/process` uses a transparent
+  local placeholder provider until an adapter is added
 - Implement specific AI providers in `/server/providers`
 - Extend validators for your specific use case
 - All code is ready for TypeScript strict mode

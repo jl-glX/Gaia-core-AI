@@ -12,10 +12,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-      "baseUrl": ".",
-      "paths": {
-      "@/*": ["client/src/*"]
-    },  
+    "paths": {
+      "@/*": ["./client/src/*"]
+    },
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,

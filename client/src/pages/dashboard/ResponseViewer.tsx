@@ -39,7 +39,9 @@ export function ResponseViewer({ response, tokensUsed, model, isLoading }: Respo
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>Response</span>
-          {tokensUsed && <span className="text-sm font-normal text-gray-600">{tokensUsed} tokens</span>}
+          {tokensUsed && (
+            <span className="text-sm font-normal text-gray-600">{tokensUsed} tokens</span>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>

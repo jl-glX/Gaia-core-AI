@@ -1,18 +1,34 @@
 import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import { Server } from "http";
 import { pathToFileURL } from "url";
 import { apiRouter } from "./routes/api.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { apiLimiter } from "./middleware/rate-limiter.js";
 import { logger } from "./services/logger.js";
+import { setupStaticServing } from "./static-serve.js";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
+
+app.disable("x-powered-by");
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? false
+        : process.env.CLIENT_ORIGIN || "http://localhost:3000",
+  })
+);
 
 // Body parsing middleware
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+const requestLimit = process.env.MAX_REQUEST_SIZE || "10kb";
+app.use(express.json({ limit: requestLimit }));
+app.use(express.urlencoded({ extended: true, limit: requestLimit }));
 
 // Logging middleware
 app.use((req: Request, _res: Response, next: NextFunction) => {
@@ -37,23 +53,34 @@ app.get("/health", (_req: Request, res: Response) => {
   });
 });
 
+if (process.env.NODE_ENV === "production") {
+  setupStaticServing(app);
+}
+
 // Error handler (must be last)
 app.use(errorHandler);
 
 // Export a function to start the server
-export async function startServer(port: string | number) {
-  try {
-    app.listen(port, () => {
-      console.log(`API server running on http://localhost:${port}`);
+export function startServer(
+  port: string | number,
+  host = process.env.HOST || "127.0.0.1"
+): Promise<Server> {
+  return new Promise((resolve, reject) => {
+    const numericPort = typeof port === "string" ? Number.parseInt(port, 10) : port;
+    const server = app.listen(numericPort, host, () => {
+      logger.info({ message: `API server running on http://${host}:${port}` });
+      resolve(server);
     });
-  } catch (err) {
-    logger.error({ error: "Failed to start server", details: err });
-    process.exit(1);
-  }
+    server.on("error", reject);
+  });
 }
 
 // Start the server directly if this is the main module
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+const entrypoint = process.argv[1];
+if (entrypoint && import.meta.url === pathToFileURL(entrypoint).href) {
   logger.info({ message: "Starting server..." });
-  startServer(process.env.PORT || 3001);
+  startServer(process.env.PORT || 3001).catch((error) => {
+    logger.error({ error: "Failed to start server", details: error });
+    process.exit(1);
+  });
 }

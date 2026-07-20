@@ -1,4 +1,4 @@
-const API_BASE = process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
+const API_BASE = import.meta.env.DEV ? "http://localhost:3001" : "";
 
 export interface ProcessRequest {
   prompt: string;
@@ -13,6 +13,7 @@ export interface ProcessResponse {
   tokensUsed: number;
   model: string;
   provider: string;
+  warnings?: string[];
 }
 
 export async function processPrompt(request: ProcessRequest): Promise<ProcessResponse> {
@@ -25,7 +26,8 @@ export async function processPrompt(request: ProcessRequest): Promise<ProcessRes
   });
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.error || `API error: ${response.status}`);
   }
 
   return response.json();

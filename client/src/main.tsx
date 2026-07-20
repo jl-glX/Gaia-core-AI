@@ -1,18 +1,18 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
-import App from './App';
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
+import App from "./App";
 
 import "./index.css";
 
-const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
 function updateDarkClass(event?: MediaQueryListEvent) {
   const isDark = event ? event.matches : darkQuery.matches;
-  document.documentElement.classList.toggle('dark', isDark);
+  document.documentElement.classList.toggle("dark", isDark);
 }
 
 updateDarkClass();
-darkQuery.addEventListener('change', updateDarkClass);
+darkQuery.addEventListener("change", updateDarkClass);
 
 const root = document.getElementById("root");
 

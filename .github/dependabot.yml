@@ -15,7 +15,3 @@ updates:
       npm-and-yarn:
         patterns:
           - "*"
-    ignore:
-      - dependency-name: "vite"
-        update-types:
-          - "version-update:semver-major"
