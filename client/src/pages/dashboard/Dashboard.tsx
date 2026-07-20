@@ -4,6 +4,7 @@ import { ResponseViewer } from "./ResponseViewer";
 import { SettingsPanel } from "./SettingsPanel";
 import { LogsPanel } from "./LogsPanel";
 import { checkHealth, processPrompt } from "../../lib/api";
+import { formatLocalizedDateTime } from "../../lib/localization";
 
 interface LogEntry {
   timestamp: string;
@@ -45,7 +46,11 @@ export function Dashboard() {
   }, []);
 
   const addLog = (message: string, type: "info" | "error" | "success" = "info") => {
-    const timestamp = new Date().toLocaleTimeString();
+    const timestamp = formatLocalizedDateTime(new Date(), {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
     setLogs((prev) => [{ timestamp, message, type }, ...prev].slice(0, 50));
   };
 
