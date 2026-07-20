@@ -6,11 +6,11 @@ export interface PIIDetectionResult {
 
 export class PIIGuard {
   private patterns: Record<string, RegExp> = {
-    email: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g,
-    phone: /(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/g,
-    ssn: /\d{3}-\d{2}-\d{4}/g,
-    creditCard: /\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}/g,
-    ipAddress: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g,
+    email: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/,
+    phone: /(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/,
+    ssn: /\d{3}-\d{2}-\d{4}/,
+    creditCard: /\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}/,
+    ipAddress: /\b(?:\d{1,3}\.){3}\d{1,3}\b/,
   };
 
   detect(text: string): PIIDetectionResult {

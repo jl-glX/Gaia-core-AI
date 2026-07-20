@@ -1,8 +1,7 @@
 {
-  "appId": "com.budgettracker.app",
-  "appName": "Budget Tracker",
-  "webDir": "dist",
-  "bundledWebRuntime": false,
+  "appId": "com.gaia.core.ai",
+  "appName": "Gaia Core AI",
+  "webDir": "dist/public",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 2000,

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, Tray, shell } from "electron";
+import { app, BrowserWindow, Menu, shell } from "electron";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -7,12 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let mainWindow;
-let tray;
-
+let appServer;
 // Data directory for storing user data
 const DATA_DIR = app.getPath("userData");
 
-function createWindow() {
+async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -21,24 +20,36 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.cjs"),
     },
-    // icon: path.join(__dirname, "build/icon.png"),
-    title: "Budget Tracker",
+    title: "Gaia Core AI",
     backgroundColor: "#ffffff",
     show: false,
   });
 
-  // Load the app
-  if (process.env.NODE_ENV === "development") {
-    mainWindow.loadURL("http://localhost:3000");
-    mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadFile(path.join(__dirname, "dist", "public", "index.html"));
-  }
-
   mainWindow.once("ready-to-show", () => {
     mainWindow.show();
+  });
+
+  // Load the app
+  if (!app.isPackaged) {
+    await mainWindow.loadURL("http://localhost:3000");
+    mainWindow.webContents.openDevTools();
+  } else {
+    process.env.NODE_ENV = "production";
+    process.env.HOST = "127.0.0.1";
+    if (!appServer) {
+      const { startServer } = await import("./dist/server/index.js");
+      appServer = await startServer(process.env.PORT || 3001);
+    }
+    await mainWindow.loadURL(`http://127.0.0.1:${process.env.PORT || 3001}`);
+  }
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith("https://")) {
+      void shell.openExternal(url);
+    }
+    return { action: "deny" };
   });
 
   mainWindow.on("closed", () => {
@@ -51,24 +62,8 @@ function createWindow() {
       label: "File",
       submenu: [
         {
-          label: "New Budget",
-          accelerator: "CmdOrCtrl+N",
-          click: () => {
-            mainWindow.webContents.send("navigate", "/create-budget");
-          },
-        },
-        { type: "separator" },
-        {
-          label: "Export Data",
-          click: () => {
-            // TODO: Implement export
-          },
-        },
-        {
-          label: "Import Data",
-          click: () => {
-            // TODO: Implement import
-          },
+          label: "Reload",
+          role: "reload",
         },
         { type: "separator" },
         { role: "quit" },
@@ -105,9 +100,7 @@ function createWindow() {
         {
           label: "Documentation",
           click: async () => {
-            await shell.openExternal(
-              "https://github.com/jl-glX/budget-tracker",
-            );
+            await shell.openExternal("https://github.com/jl-glX/Gaia-core-AI");
           },
         },
         {
@@ -124,37 +117,13 @@ function createWindow() {
   Menu.setApplicationMenu(menu);
 }
 
-function createTray() {
-  //tray = new Tray(path.join(__dirname, "build/icon.png"));
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: "Show App",
-      click: () => {
-        mainWindow.show();
-      },
-    },
-    {
-      label: "Quit",
-      click: () => {
-        app.quit();
-      },
-    },
-  ]);
-  function createTray() {
-    // Tray desactivado temporalmente hasta tener un icono válido.
-    // Evita errores con build/icon.png durante desarrollo.
-    return;
-  }
-}
-
-app.on("ready", () => {
+app.on("ready", async () => {
   // Ensure data directory exists
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
 
-  createWindow();
-  createTray();
+  await createWindow();
 });
 
 app.on("window-all-closed", () => {
@@ -165,11 +134,11 @@ app.on("window-all-closed", () => {
 
 app.on("activate", () => {
   if (mainWindow === null) {
-    createWindow();
+    void createWindow();
   }
 });
 
 // Set app user model id for windows
 if (process.platform === "win32") {
-  app.setAppUserModelId("com.budgettracker.app");
+  app.setAppUserModelId("com.gaia.core.ai");
 }

@@ -9,7 +9,7 @@ export class LanguageGuard {
 
   validate(text: string): LanguageValidationResult {
     // Simple heuristic: check for common non-ASCII patterns
-    const hasNonAscii = /[^\x00-\x7F]/.test(text);
+    const hasNonAscii = Array.from(text).some((character) => (character.codePointAt(0) ?? 0) > 127);
 
     if (hasNonAscii) {
       return {
