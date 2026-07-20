@@ -24,7 +24,8 @@
     "test:watch": "vitest",
     "ci": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",
     "electron": "electron .",
-    "start": "concurrently --kill-others-on-fail --names server,web,electron \"npm run server\" \"npm run web\" \"wait-on http://localhost:3000 http://localhost:3001/health && npm run electron\"",
+    "wait:services": "tsx scripts/wait-for-urls.ts http://localhost:3000 http://localhost:3001/health",
+    "start": "concurrently --kill-others-on-fail --names server,web,electron \"npm run server\" \"npm run web\" \"npm run wait:services && npm run electron\"",
     "server": "tsx server/index.ts",
     "build:electron:win": "npm run build && electron-builder --config electron.config.json --win",
     "build:electron:mac": "npm run build && electron-builder --config electron.config.json --mac",
@@ -100,7 +101,6 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.64.0",
     "vite": "^8.1.5",
-    "vitest": "^4.1.10",
-    "wait-on": "^9.0.10"
+    "vitest": "^4.1.10"
   }
 }
