@@ -7,6 +7,7 @@ import { pathToFileURL } from "url";
 import { apiRouter } from "./routes/api.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { apiLimiter } from "./middleware/rate-limiter.js";
+import { requireLocalAccess } from "./middleware/network-access.js";
 import { logger } from "./services/logger.js";
 import { setupStaticServing } from "./static-serve.js";
 
@@ -39,8 +40,8 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
   next();
 });
 
-// API rate limiting
-app.use("/api/", apiLimiter);
+// Keep the AI API local by default, even if the listening host is misconfigured.
+app.use("/api/", requireLocalAccess, apiLimiter);
 
 // API routes
 app.use("/api", apiRouter);
