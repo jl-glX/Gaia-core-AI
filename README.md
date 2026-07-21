@@ -185,6 +185,10 @@ Content-Type: application/json
 
 See `.env.example` for all available options.
 
+The API only accepts requests from the local device by default. Remote access must be
+enabled explicitly with `ALLOW_REMOTE_ACCESS=true` and protected with a long random
+`GAIA_API_TOKEN`, supplied as a Bearer token. Do not put this token in the browser bundle.
+
 ## Scripts
 
 - `npm run dev` - Start the web frontend and API
@@ -204,6 +208,8 @@ See `.env.example` for all available options.
 - PII detection warnings
 - Language validation
 - Token quota management
+- Local-only API access by default
+- Bearer-token authentication for explicitly enabled remote API access
 
 ## Notes
 
